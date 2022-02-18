@@ -2,6 +2,7 @@
   Author: Anirban
   Email:  ac4743@nau.edu
 --------------------------*/
+#include <map>
 #include <chrono>
 #include <cstdlib>
 #include <cstring>

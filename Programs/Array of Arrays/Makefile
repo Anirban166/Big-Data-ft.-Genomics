@@ -1,6 +1,6 @@
-matrix : matrix.o
-	g++ -std=c++17 -O3 -o matrix matrix.o 
-matrix.o : matrix.cpp 
-	g++ -c matrix.cpp
+arrayConstructs : arrayConstructs.o
+	g++ -std=c++17 -O3 -o arrayConstructs arrayConstructs.o 
+arrayConstructs.o : arrayConstructs.cpp 
+	g++ -c arrayConstructs.cpp
 clean:	
-	rm matrix matrix.o
+	rm arrayConstructs arrayConstructs.o

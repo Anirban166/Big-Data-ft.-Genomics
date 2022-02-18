@@ -2,10 +2,10 @@
   Author: Anirban
   Email:  ac4743@nau.edu
 --------------------------*/
-#include "matrix.h"
+#include "arrayConstructs.h"
 // Compile and run locally using: g++ -std=c++17 <filename>.cpp -o <executablename> && ./<executablename> <problemname> <filepath>
-// Example: g++ -std=c++17 arrayVersion.cpp -o arrayVersion && ./arrayVersion <problemID> sampleDataset.fa
-// Alternatively, use the make file: make && ./arrayVersion <problemID> sampleDataset.fa
+// Example: g++ -std=c++17 arrayConstructs.cpp -o arrayConstructs && ./arrayConstructs <problemID> sampleDataset.fa
+// Alternatively, use the make file: make && ./arrayConstructs <problemID> sampleDataset.fa
 // Slurm-based compute cluster (Monsoon for instance): make && sbatch <runnerscript>.sh
 // Use -O3 flag during compilation for better compiler optimization, and/or multiple threads for obtaining results faster.
 
@@ -285,7 +285,7 @@ void FASTA_readset::computeStatistics(char problemID)
 }
 
 // Function that implements a bruteforce search to find a row among multiple rows in a dataset, or in between datasets:
-// Complexity: O(50*N) for one fragment, O(50*N*M) for entire search. (N, M = fragments in dataset two, one)
+// Complexity: O(50*N) for one fragment, O(50*N*M) for entire search, where (N, M) = fragments in dataset (two, one) respectively.
 int FASTA_readset::searchFunction(char** DataSetTwoArrayOfArrays, char* DataSetOneSingleArray)
 {   
     /* std::strcmp() version:
@@ -379,11 +379,11 @@ void FASTA_readset::printTotalSequenceCount()
 // Function to print the total count of each letter in entire data file: (must be called after countLetterFrequency()):
 void FASTA_readset::printLetterCounts()
 {
-    print("There are a total of ", countA, " 'A' characters in the data.\n");
-    print("There are a total of ", countC, " 'C' characters in the data.\n");
-    print("There are a total of ", countG, " 'G' characters in the data.\n");
-    print("There are a total of ", countT, " 'T' characters in the data.\n");
-    print("There are a total of ", countN, " 'N' characters in the data.\n");
+    std::map<char, int> letterCounts;	
+    letterCounts['A'], letterCounts['C'], letterCounts['G'], letterCounts['T'], letterCounts['N'] = countA, countC, countG, countT, countN;	
+    int counts[5] = {countA, countC, countG, countT, countN};
+    for (const auto &[key, value]: letterCounts)
+        print("There are a total of ", value, " '", key, "' characters in the data.\n");
 }
 
 // Function to sort the sequence fragment array for dataset two (entire rows, not characters within one): (simple bubble sort)
@@ -431,21 +431,17 @@ void FASTA_readset::sortReadArray()
             while (p < readCol)
             {
                 if (readArray[j][p] > readArray[k][p]) 
-                {
                     break;
-                } 
                 else if (readArray[j][p] < readArray[k][p]) 
                 {
                     swap(k, j);
                     break;
                 } 
                 else if (readArray[j][p] == readArray[k][p]) 
-                {
                     p++;
-                } 
                 else 
                 {
-                    print("\nError!\n");
+                    print("\nError while sorting!\n");
                     exit(-1);
                 }
             }
@@ -486,10 +482,9 @@ FASTA_readset::FASTA_readset(int rowCount, char* filePathArray)
     readArray = new char*[row];
     // Made a simple parallelized version (just to test faster) using OpenMP: (for instance, each thread here gets rows given by row/threadCount)
     // Add stuff to:
-    // Homework1.cpp: #include <omp.h> 
+    // arrayConstructs.cpp: #include <omp.h> 
     // Makefile: -fopenmp -lpthread $threadCount
     // Runner scripts: #SBATCH --cpus-per-task threadCount
-    // tried for threadCount := 2, 4 and 8; (number of threads/cores while testing on Monsoon, i.e. 1 thread per CPU core therein)
     // #pragma omp parallel for private(i) shared(countArray, readArray) schedule(static) // collapse(threadCount)
     for(int i = 0; i < row; i++) 
     {
@@ -501,32 +496,31 @@ FASTA_readset::FASTA_readset(int rowCount, char* filePathArray)
 // Destructor:
 FASTA_readset::~FASTA_readset()
 {
-    // Uncomment the commented lines (with code) below to know the time taken by the destructor:
-	// auto startDestruction = high_resolution_clock::now();
+    auto startDestruction = high_resolution_clock::now();
     // Delete the arrays used, thereby deallocating the memory reserved for them:
     delete[] countArray, readArray, uniqueSequenceArray, totalSequenceArray, dataSetOneReadArray, dataSetTwoReadArray;
     // Delete rest of the variables for the same purpose:
     delete[] filePath, countA, countC, countG, countT, countN, readCol, row;                                             
-    // auto wrapUp = high_resolution_clock::now();
-    // auto duration1 = duration_cast<microseconds>(startDestruction - wrapUp);
-    // print("\nTime taken by the Destructor: ", duration1.count(), " microseconds.\n");
+    auto wrapUp = high_resolution_clock::now();
+    auto destructorDuration = duration_cast<microseconds>(startDestruction - wrapUp);
+    print("\nTime taken by the Destructor: ", destructorDuration.count(), " microseconds.\n");
 }
 
 int main(int argc, char *argv[])
 {
     if (argc != 3) 
-	{
-		print("Error: Two input parameters are expected.\nProper usage:\n./Sequence <problemFlag> <filePath>\nExiting the program!\n");  
-		exit(-1); // equivalent, but return 1/0; might be more graceful
-	}
+    {
+	print("Error: Two input parameters are expected.\nProper usage:\n./Sequence <problemFlag> <filePath>\nExiting the program!\n");  
+	exit(-1); // equivalent, but return 1/0; might be more graceful
+    }
     else print("The number of arguments passed is: ", argc, "\nThe first argument is: ", argv[0], 
-	          "\nThe second argument is: ", argv[1], "\nThe third argument is: ", argv[2], "\n"); 
+	       "\nThe second argument is: ", argv[1], "\nThe third argument is: ", argv[2], "\n"); 
               
     std::string problemNumber = argv[1], filePath = argv[2];
     char* filePathArray = new char[100];
     char* problemNumberArray = new char[100];
 
-    // Saving the length of problemNumber and filePath, since I'm dealing with an std::string object instead of a const char*:
+    // Saving the length of problemNumber and filePath before saving them as arrays, since I'm dealing with an std::string object instead of a const char*:
     int problemNumberlength = 0, filePathLength = 0;
     while (problemNumber[problemNumberlength] != '\0')
     {
@@ -536,7 +530,6 @@ int main(int argc, char *argv[])
     {
         filePathLength++;
     }
-    // Saving problemNumber and filePath as arrays:
     for(int i = 0; i < problemNumberlength; i++)
     {
         problemNumberArray[i] = problemNumber[i];

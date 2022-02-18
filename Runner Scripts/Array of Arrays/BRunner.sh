@@ -4,4 +4,4 @@
 #SBATCH --time=96:00:00 
 #SBATCH --mem=5000
 
-srun ./matrix Problem1B sampleDataset.fa
+srun ./arrayConstructs Problem1B sampleDataset.fa

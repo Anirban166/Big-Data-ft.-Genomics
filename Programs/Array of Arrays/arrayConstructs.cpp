@@ -15,8 +15,8 @@ int FASTA_readset::countNumberOfReads()
     int count = -1;
     char* tempData = new char[1000];
     dataFile.open(filePath);
-    while (!dataFile.eof()) 
-	{   // One for the header, one for the read: (i.e. the read count would be half the number of lines in the file)
+    while(!dataFile.eof()) 
+    {   // One for the header, one for the read: (i.e. the read count would be half the number of lines in the file)
         dataFile >> tempData;
         dataFile >> tempData;
         count++;
@@ -30,7 +30,7 @@ void FASTA_readset::saveCountArray(char* header, int headerLength, int index)
 {
     int a, readNum, start, end, m = 1, count = 0;
     char* buffer = new char[100];                
-    while (m < headerLength)   
+    while(m < headerLength)   
     {                          
         start = m + 1; // Offset header index by 1 (to skip '_'/'R') 
         end = start;
@@ -38,14 +38,14 @@ void FASTA_readset::saveCountArray(char* header, int headerLength, int index)
         {
             end++;
         }
-        for (a = start; a < end; a++) // From start of the subsection up till the end, save into buffer
+        for(a = start; a < end; a++) // From start of the subsection up till the end, save into buffer
         {
             buffer[a - start] = header[a];
         }
         buffer[a] = '\0';              
         readNum = atoi(buffer);       
         countArray[index][count]= readNum; 
-        for (int p = 0; p < (a - start) + 1; p++)
+        for(int p = 0; p < (a - start) + 1; p++)
         {
             buffer[p] = '\0';
         }
@@ -58,7 +58,7 @@ void FASTA_readset::saveCountArray(char* header, int headerLength, int index)
 void FASTA_readset::saveReadArray(char* read, int index)
 {
     int readLength = 50; // Since each read is exactly 50 characters (or rather nucleotides) long
-    for (int j = 0; j < readLength; j++) 
+    for(int j = 0; j < readLength; j++) 
     {
         readArray[index][j] = read[j];
     }
@@ -69,10 +69,9 @@ void FASTA_readset::saveData()
 {
     char* header = new char[1000]; 
     char* read = new char[1000];
-    int index;                                            
-    int headerLength;                                      
+    int index, headerLength;                                      
     dataFile.open(filePath);                             
-    for (int i = 0; i < row; i++)
+    for(int i = 0; i < row; i++)
     {                                                      
         dataFile >> header;                            
         dataFile >> read;                            
@@ -161,15 +160,13 @@ void FASTA_readset::computeUniqueSequenceCount()
 {
     int count = 0;                  
     int unique;                       
-    for (int i = 1; i < countCol; i++)
+    for(int i = 1; i < countCol; i++)
     {  
         unique = 0;                    
-        for (int j = 0; j < row; j++) 
+        for(int j = 0; j < row; j++) 
         {
-            if (countArray[j][i] != 0) 
-            {
+            if(countArray[j][i] != 0) 
                 unique++;
-            }
         }
         uniqueSequenceArray[count] = unique;
         count++;                          
@@ -181,10 +178,10 @@ void FASTA_readset::computeTotalSequenceCount()
 {
     int count = 0;                 
     int total;                    
-    for (int i = 1; i < countCol; i++)  
+    for(int i = 1; i < countCol; i++)  
     {                                   
         total = 0;                   
-        for (int j = 0; j < row; j++)
+        for(int j = 0; j < row; j++)
         {
             total = total + (countArray[j][i]); 
         }                                       
@@ -198,9 +195,9 @@ void FASTA_readset::countLetterFrequency()
 {
     int frequencyA(0), frequencyC(0), frequencyG(0), frequencyT(0), frequencyN(0);
     // int frequencyA = frequencyC = frequencyG = frequencyT = frequencyN = 0;
-    for (int i = 0; i < readCol; i++) // Iterate through all the columns
+    for(int i = 0; i < readCol; i++) // Iterate through all the columns
     { 
-        for (int j = 0; j < row; j++) // Iterate through all the rows
+        for(int j = 0; j < row; j++) // Iterate through all the rows
         {
             switch(readArray[j][i])
             {
@@ -288,27 +285,12 @@ void FASTA_readset::computeStatistics(char problemID)
 // Complexity: O(50*N) for one fragment, O(50*N*M) for entire search, where (N, M) = fragments in dataset (two, one) respectively.
 int FASTA_readset::searchFunction(char** DataSetTwoArrayOfArrays, char* DataSetOneSingleArray)
 {   
-    /* std::strcmp() version:
     for(int i = 0; i < uniqueSequenceArray[1]; i++)
     {
         // print("Comparing: ", DataSetTwoArrayOfArrays[i], " and ", DataSetOneSingleArray, " for this round.\n");
         if((std::strcmp(DataSetTwoArrayOfArrays[i], DataSetOneSingleArray) == 0)) 
             return 1;
-    }*/           
-    for (int i = 0; i < readCol; i++)
-    { 
-        for (int j = 0; j < uniqueSequenceArray[1]; j++)
-        {
-            int counter = 0;
-            for(int j = 0; j < 50; j++)
-            {   
-                if(DataSetTwoArrayOfArrays[j][i] == DataSetOneSingleArray[j]) // Comparing character by character
-                    counter++;
-            }
-            if(counter == 50) // If all 50 characters/nucleotides are the same, then its a match! (element found)
-                return 1;                             
-        }
-    }   
+    } 
     return -1;
 }
 
@@ -317,12 +299,12 @@ int FASTA_readset::searchFunction(char** DataSetTwoArrayOfArrays, char* DataSetO
 int FASTA_readset::binarySearchFunction(char* DataSetTwoArrayOfArrays[], char* DataSetOneSingleArray)
 {  
     int left = 0, right = uniqueSequenceArray[1] - 1;
-    while (left <= right) 
+    while(left <= right) 
     {
         int middle = left + (right - left) / 2;
-        if (DataSetTwoArrayOfArrays[middle] == DataSetOneSingleArray)
+        if(DataSetTwoArrayOfArrays[middle] == DataSetOneSingleArray)
             return middle;
-        if (DataSetTwoArrayOfArrays[middle] < DataSetOneSingleArray)
+        if(DataSetTwoArrayOfArrays[middle] < DataSetOneSingleArray)
             left = middle + 1;
         else
             right = middle - 1;
@@ -333,9 +315,9 @@ int FASTA_readset::binarySearchFunction(char* DataSetTwoArrayOfArrays[], char* D
 // Function to print the count array: (must be called after saveData())
 void FASTA_readset::printCountArray()
 {
-    for (int i = 0; i < row; i++) 
+    for(int i = 0; i < row; i++) 
     {
-        for (int j = 0; j < countCol; j++) 
+        for(int j = 0; j < countCol; j++) 
         {
             print(countArray[i][j], " ");
         }
@@ -346,10 +328,10 @@ void FASTA_readset::printCountArray()
 // Function to print the read array: (must be called after saveData())
 void FASTA_readset::printReadArray()
 {
-    for (int i = 0; i < row; i++) 
+    for(int i = 0; i < row; i++) 
     {
         print(i, " ");
-        for (int j = 0; j < readCol; j++) 
+        for(int j = 0; j < readCol; j++) 
         {
             print(readArray[i][j]);
         }
@@ -360,7 +342,7 @@ void FASTA_readset::printReadArray()
 // Function to print the number of unique sequences in each of the 14 data sets: (must be called after computeUniqueSequenceCount())
 void FASTA_readset::printUniqueSequenceCount()
 {
-    for (int i = 0; i < 14; i++) 
+    for(int i = 0; i < 14; i++) 
     {
         print("There are ", uniqueSequenceArray[i], " unique sequence fragments in dataset number ", i + 1, ".\n");
     }
@@ -369,8 +351,7 @@ void FASTA_readset::printUniqueSequenceCount()
 // Function to print the total number of sequences in each of the 14 data sets: (must be called after computeTotalSequenceCount())
 void FASTA_readset::printTotalSequenceCount()
 {
-    int length = 14;  // length of totalSequenceArray
-    for (int i = 0; i < length; i++) 
+    for(int i = 0; i < 14; i++) 
     {
         print("There are ", totalSequenceArray[i], " total sequence fragments in dataset number ", i + 1, ".\n");
     }
@@ -381,8 +362,7 @@ void FASTA_readset::printLetterCounts()
 {
     std::map<char, int> letterCounts;	
     letterCounts['A'], letterCounts['C'], letterCounts['G'], letterCounts['T'], letterCounts['N'] = countA, countC, countG, countT, countN;	
-    int counts[5] = {countA, countC, countG, countT, countN};
-    for (const auto &[key, value]: letterCounts)
+    for(const auto &[key, value]: letterCounts)
         print("There are a total of ", value, " '", key, "' characters in the data.\n");
 }
 
@@ -411,7 +391,7 @@ void FASTA_readset::sortSecondDataSetReadArray()
 void FASTA_readset::swap(int j, int k)
 {
     char tempArray[readCol];
-    for (int i = 0; i < readCol; i++)
+    for(int i = 0; i < readCol; i++)
     {
         tempArray[i] = readArray[j][i];
         readArray[j][i] = readArray[k][i];
@@ -423,21 +403,21 @@ void FASTA_readset::swap(int j, int k)
 void FASTA_readset::sortReadArray()
 { 
     int p;
-    for (int k = 0; k < row - 1; k++) 
+    for(int k = 0; k < row - 1; k++) 
     {   
-        for (int j = k + 1; j < row; j++) 
+        for(int j = k + 1; j < row; j++) 
         {
             p = 0; 
-            while (p < readCol)
+            while(p < readCol)
             {
-                if (readArray[j][p] > readArray[k][p]) 
+                if(readArray[j][p] > readArray[k][p]) 
                     break;
-                else if (readArray[j][p] < readArray[k][p]) 
+                else if(readArray[j][p] < readArray[k][p]) 
                 {
                     swap(k, j);
                     break;
                 } 
-                else if (readArray[j][p] == readArray[k][p]) 
+                else if(readArray[j][p] == readArray[k][p]) 
                     p++;
                 else 
                 {
@@ -508,7 +488,7 @@ FASTA_readset::~FASTA_readset()
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3) 
+    if(argc != 3) 
     {
 	print("Error: Two input parameters are expected.\nProper usage:\n./Sequence <problemFlag> <filePath>\nExiting the program!\n");  
 	exit(-1); // equivalent, but return 1/0; might be more graceful
@@ -522,11 +502,11 @@ int main(int argc, char *argv[])
 
     // Saving the length of problemNumber and filePath before saving them as arrays, since I'm dealing with an std::string object instead of a const char*:
     int problemNumberlength = 0, filePathLength = 0;
-    while (problemNumber[problemNumberlength] != '\0')
+    while(problemNumber[problemNumberlength] != '\0')
     {
         problemNumberlength++;
     }
-    while (filePath[filePathLength] != '\0')
+    while(filePath[filePathLength] != '\0')
     {
         filePathLength++;
     }
@@ -541,7 +521,6 @@ int main(int argc, char *argv[])
 
     // Saving the problem ID (A, B or C) character to compare against, and then passing it as argument to my custom constructor:
     char problemID = problemNumberArray[8]; // 9th character, right after 'Problem1'
-
     switch(problemID)
     {
         case 'A': print("\nProblem1A selected: Computing the number of unique and total sequence fragments!\n"); break;
@@ -550,7 +529,6 @@ int main(int argc, char *argv[])
          default: print("\nInvalid second argument. Expecting one of these: Problem1A or Problem1B or Problem1C\n");
                   print("Exiting the program!\n"); exit(-1);          
     }    
-
     // Common for all problem cases, with the specific problemID (A/B/C) specifying which statistics to compute:
     // Change to the row count you want, if you do not want to read the entire datafile (path to which you're passing as the third argument):    
     int rowCount = -1; // Going with the default, i.e. considering all the rows of the combined dataset

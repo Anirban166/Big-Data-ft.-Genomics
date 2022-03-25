@@ -6,6 +6,7 @@ Contents
 ---
 - [Array Constructs](https://github.com/Anirban166/Big-Data-ft.-LSDS/tree/main/Programs/Array%20of%20Arrays): Using an array of arrays to store, sort and search through 50-character sequence fragments from a dataset in FASTA format with over 36 million reads.
 - [Linked List Constructs](https://github.com/Anirban166/Big-Data-ft.-LSDS/tree/main/Programs/Linked%20List%20of%20Arrays): Using an unidirectional singly linked list of character arrays to store and search through sequence fragments, with these in turn being used as queries against 50-mer sequences of the Bacillus anthracis genome, with over 36 million and 5.2 million entries in the read set and genome file respectively.
+- [Hash Table Constructs](https://github.com/Anirban166/Big-Data-ft.-LSDS/tree/main/Programs/Hash%20Table%20with%20Chaining): Using a hash table (with collision chaining) to store 16-mer sequences of the Anthrax genome, with these in turn being compared against millions of randomized genome-based 16-mers, completely randomized equivalents (i.e., ones not from the genome) and modified 16-mers with changes in the base characters given by a 1% per-base error rate. 
 
 Data
 --- 

@@ -11,7 +11,7 @@ FASTAreadset_HT::FASTAreadset_HT(std::string filePath, unsigned int hashTableSiz
     base = 4;                // 4 character options (A, C, G, T)
     sequenceLength = 16;    // Length of fragment is 16 (16-mers) 
     genomeFilePath = filePath;    
-    genomeRowCount = 0; collisions = 0; elementCount = 0; duplicates = 0;
+    genomeRowCount, collisions, duplicates, elementCount = 0;
     // Number of possible radix numbers (size) is given by base^sequenceLength (i.e. 4^16):
     size = (unsigned long long)(pow(base, sequenceLength));
     print("Size of the hash table is: ", m , "\n");

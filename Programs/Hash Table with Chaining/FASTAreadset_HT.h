@@ -33,9 +33,9 @@ struct Node
 // Required class:
 class FASTAreadset_HT
 {
-    private:
-	    unsigned int m;                       // Variable to denote the size of the hash table
-	    Node** T;                            // Pointer to array of pointers to linked lists
+    	private:
+	        unsigned int m;                       // Variable to denote the size of the hash table
+	        Node** T;                            // Pointer to array of pointers to linked lists
 		unsigned long long size;            // Largest possible radix number value
 		unsigned long long elementCount;   // Number of elements added to hash table
 		unsigned long long collisions;    // Number of sequences with the same address but different radix number
@@ -52,8 +52,8 @@ class FASTAreadset_HT
 		bool searchTableForSequence(char* sequence);                                       // Function to search the hash table for a given n-mer sequence
 		unsigned int radixBaseConversion(int* readInt);                                   // Function to convert the integer sequence array into a radix number
 		unsigned int divisionMethodHash(unsigned int radixNumber);                       // Function to convert radix numbers into addresses using the division method
-		unsigned int convertSequenceToRadixNumber(char* inputSequence);		            // Function to convert a given sequence into a radix number notation
-		void insertInTable(unsigned int address, unsigned int radixNumber);		       // Function to insert radix number at a provided address
+		unsigned int convertSequenceToRadixNumber(char* inputSequence);		        // Function to convert a given sequence into a radix number notation
+		void insertInTable(unsigned int address, unsigned int radixNumber);	       // Function to insert radix number at a provided address
 		bool searchTableForRadix(Node* tableAddress, unsigned int radixNumber);       // Function to search the table for a radix number
 		int* characterToIntegerConversion(char* readCharacter, int* readInteger);    // Function to convert 16-char array with characters A, C, G and T to integers (0, 1, 2, 3)		
 		void printNumberOfTableElements();                                          // Function to print number of elements (includes all attempts to add a fragment) added to the table
@@ -63,7 +63,7 @@ class FASTAreadset_HT
 		int countNumberOfLinesGenome();                                         // Function that counts the total number of rows in the genome file
 		void saveGenomeFileInHashTable();                                      // Function to save the genome file into the hash table
 		unsigned int genomeSearch(char** genome);                             // Function to search the genome for matches against seqeunces from the hash table (iterating through the genome's 16-mers)
-        unsigned int genomeSearchWithOnePercentBaseErrorRate(char** genome); // Function to search the genome for matches against seqeunces in the hash table with 1% chance of every character to be changed to another one!	
+        	unsigned int genomeSearchWithOnePercentBaseErrorRate(char** genome); // Function to search the genome for matches against seqeunces in the hash table with 1% chance of every character to be changed to another one!	
 		unsigned int randomSequenceComparison();                            // Function to make completely random 16-mer sequences and then compare those against the hash table stored genome sequences
 		unsigned int randomGenomeSequenceComparison(char** genome);        // Function to take random 16-mer sequences from the genome and then compare those against the hash table stored sequences
 		char** saveGenomeFile(std::string genomeFilePath);                // Function to save the genome file

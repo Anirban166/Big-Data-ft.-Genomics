@@ -7,7 +7,7 @@
 // Examples:
 // make && ./linkedListConstructs Problem1A sampleDataset.fa
 // make && ./linkedListConstructs Problem1B sampleDataset.fa sampleGenome.fasta
-// Monsoon (or the real deal): make && sbatch <runnerscript>.sh
+// Usage on a Slurm-based compute cluster: make && sbatch <runnerscript>.sh
 #include "FASTAreadset_LL.h"
 
 int main(int argc, char* argv[]) 
@@ -46,24 +46,12 @@ int main(int argc, char* argv[])
         std::string query;
 
         print("\nBeginning the search for the required five fragments!\n");
-        // Search for sequence (i):
+        // Search for a sequence:
         query = "CTAGGTACATCCACACACAGCAGCGCATTATGTATTTATTGGATTTATTT";
         match = test.searchFragment(query);
         test.printSearchResults(match, query);
-        // Search for sequence (ii):
-        query = "GCGCGATCAGCTTCGCGCGCACCGCGAGCGCCGATTGCACGAAATGGCGC";
-        match = test.searchFragment(query);
-        test.printSearchResults(match, query);
-        // Search for sequence (iii):
-        query = "CGATGATCAGGGGCGTTGCGTAATAGAAACTGCGAAGCCGCTCTATCGCC";
-        match = test.searchFragment(query);
-        test.printSearchResults(match, query);
-        // Search for sequence (iv):
+        // Search for another sequence:
         query = "CGTTGGGAGTGCTTGGTTTAGCGCAAATGAGTTTTCGAGGCTATCAAAAA";
-        match = test.searchFragment(query);
-        test.printSearchResults(match, query);
-        // Search for sequence (v):
-        query = "ACTGTAGAAGAAAAAAGTGAGGCTGCTCTTTTACAAGAAAAAGTNNNNNN";
         match = test.searchFragment(query);
         test.printSearchResults(match, query);
     }
@@ -73,7 +61,7 @@ int main(int argc, char* argv[])
         int matchCount;        
         std::string genomeFilePath = argv[3];
 
-        print("\nProblem1B selected: Saving the read set and the genome file!\n");
+        print("\nProblem1B selected: Saving both the read set and the genome file!\n");
         FASTAreadset_LL test(readSetFilePath);
         test.saveReadsLL();
         print("\nComputing the count of 50-character fragments that can be obtained from the Bacillus anthracis genome!\n");       

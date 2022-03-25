@@ -6,7 +6,7 @@
 // make && ./<executablename> -o <problemname> <genomefilepath>
 // Examples:
 // make && ./hashTableConstructs Problem1A sampleGenome.fasta
-// Monsoon (or the real deal): make && sbatch <runnerscript>.sh
+// Usage on a Slurm-based compute cluster: make && sbatch <runnerscript>.sh
 #include "FASTAreadset_HT.h"
 
 int main(int argc, char* argv[]) 

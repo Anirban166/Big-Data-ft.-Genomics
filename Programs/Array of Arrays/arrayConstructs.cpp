@@ -6,7 +6,7 @@
 // Compile and run locally using: g++ -std=c++17 <filename>.cpp -o <executablename> && ./<executablename> <problemname> <filepath>
 // Example: g++ -std=c++17 arrayConstructs.cpp -o arrayConstructs && ./arrayConstructs <problemID> sampleDataset.fa
 // Alternatively, use the make file: make && ./arrayConstructs <problemID> sampleDataset.fa
-// Slurm-based compute cluster (Monsoon for instance): make && sbatch <runnerscript>.sh
+// Usage on a Slurm-based compute cluster: make && sbatch <runnerscript>.sh
 // Use -O3 flag during compilation for better compiler optimization, and/or multiple threads for obtaining results faster.
 
 // Count the total number of rows present in our entire data set: (outputs the total row count in that file)

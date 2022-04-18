@@ -1,5 +1,5 @@
 /*-------------------------
-  Author: Anirban
+  Author: Anirban166/Ani
   Email:  ac4743@nau.edu
 --------------------------*/
 // Compile and run locally using: 
@@ -15,9 +15,9 @@ int main(int argc, char* argv[])
     if((argc < 3) || (argc > 4)) 
     {
         print("\nError: Two or three input parameters are expected.\n\nProper usage looks like:\n",
-        "./Homework2 <problemID> <filepath>\n", "or\n./Homework2 <problemID> <filepath> <filepath>\n\n", 
-		"For example, try this:\n./Homework2 Problem1A /scratch/ac4743/HW2/sample_dataset.fa\n", 
-        "or\n./Homework2 Problem1B /scratch/ac4743/HW2/sample_dataset.fa /scratch/ac4743/HW2/sample_genome.fa", 
+        "./linkedListConstructs <problemID> <filepath>\n", "or\n./linkedListConstructs <problemID> <filepath> <filepath>\n\n", 
+		"For example, try this:\n./linkedListConstructs Problem1A /scratch/ac4743/sampleDataset.fa\n", 
+        "or\n./linkedListConstructs Problem1B /scratch/ac4743/sampleDataset.fa /scratch/ac4743/sampleGenome.fa", 
         "\n\nExiting the program!\n"); 
         exit(-1);
     }

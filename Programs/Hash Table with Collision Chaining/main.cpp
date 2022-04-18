@@ -1,11 +1,10 @@
 /*-------------------------
-  Author: Anirban
+  Author: Anirban166/Ani
   Email:  ac4743@nau.edu
 --------------------------*/
 // Compile and run locally using: 
 // make && ./<executablename> -o <problemname> <genomefilepath>
-// Examples:
-// make && ./hashTableConstructs Problem1A sampleGenome.fasta
+// Example: make && ./hashTableConstructs Problem1A sampleGenome.fasta
 // Usage on a Slurm-based compute cluster: make && sbatch <runnerscript>.sh
 #include "FASTAreadset_HT.h"
 
@@ -14,7 +13,7 @@ int main(int argc, char* argv[])
     if(argc != 3) 
     {
         print("\nError: Two or three input parameters are expected.\n\nProper usage looks like:\n", "./hashTableConstructs <problemID> <filepath>\n", 
-		"For example, try this:\n./hashTableConstructs Problem1A /scratch/ac4743/HW2/test_genome.fasta\n", "\n\nExiting the program!\n"); 
+		"For example, try this:\n./hashTableConstructs Problem1A /scratch/ac4743/testGenome.fasta\n", "\n\nExiting the program!\n"); 
         exit(-1);
     }
     else 

@@ -36,16 +36,16 @@ struct Node
 class BLAST
 {
 	public:
-	    int readLength, matchScore, gapScore, mismatchScore;
-        BLAST(int scoreForMatch, int penalityForMismatch, int penaltyForGap);
+		int readLength, matchScore, gapScore, mismatchScore;
+		BLAST(int scoreForMatch, int penalityForMismatch, int penaltyForGap);
 
-	    // Functions dealing with the readset:
+		// Functions dealing with the readset:
 		int countNumberOfReads(std::string readFilePath);
 		void saveReads(int readCount, int readLength, char** readset, std::string readFilePath);
 		void createRandomReads(char** readset, int readCount, int readLength);
 		char** selectNRandomFragmentsFromGenome(int readCount, int readLength, char* genome, int genomeLength);
 		void introducePercentError(int readCount, int readLength, char** readset, int percentError);
-		char** splitFragmentIntoKmer(char* input, int inputLength, int kmer, int* numRow);		
+		char** splitFragmentIntoKmer(char* input, int inputLength, int kmer, int* rowCount);		
 
 		// Functions dealing with the genome:
 		int getLengthOfGenome(std::string genomeFilePath);
@@ -67,9 +67,9 @@ class BLAST
 		int convertFragmentToRadixNumber(char* inputRead, int kmer);
 		int* characterToIntegerConversion(char* readCharacter, int* readInteger, int kmer);
 		int radixBaseConversion(int* readInteger, int kmer);
-		int divisionMethodHash(int radixNum, int hashTableSize);
-		void insertInTable(int address, int radixNum, Node** T, int hashTableSize, int* genomeIndex);
-		bool searchTableForRadix(Node* tableAddress, int radixNum, int* genomeIndex);
+		int divisionMethodHash(int radixNumber, int hashTableSize);
+		void insertInTable(int address, int radixNumber, Node** T, int hashTableSize, int* genomeIndex);
+		bool searchTableForRadix(Node* tableAddress, int radixNumber, int* genomeIndex);
 		bool searchTableForFragment(char* fragment, int kmer, int hashTableSize, Node** T, int* genomeIndex);
 		void deleteHashTable(int hashTableSize, Node** T);
 };

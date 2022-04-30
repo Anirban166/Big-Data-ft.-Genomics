@@ -29,18 +29,18 @@ int main(int argc, char* argv[])
     {
         // Instantiating an object of my class with a match score of 2, a mismatch penalty of -1 and a gap penalty of -1 as required:
         BLAST testObject(2, -1, -1);
-        // Using 11-mer seeds and a hash table of size (m) 10,000,000 as required:
-        int kmer = 11, hashTableSize = 10000000, matchCount = 0;
-        char** readset = nullptr;              // Array for readset
-        int* genomeIndex = new int;           // Pointer for indexing genome
-        char** genomeKmer;                   // Array for genome splits into kmer
-        int* genomeRowCount = new int;      // Number of rows in the genome kmer
-        char* subGenome = nullptr;         // To expand portion of genome for seed search
-        int* subGenomeLength = new int;   // Length of the sub-genome
-        bool* seedFound = new bool;      // Boolean indicating whether the seed was found or not
-        bool printFlag = false;         // Boolean indicating whether to print text alignment or not
-        Node** T;                      // Pointer to hash table
-        int percentError;             // Percent of error (to be set 5% to work on the second part of 1A)
+        int matchCount = 0;
+        int kmer = 11, hashTableSize = 10000000; // Using 11-mer seeds and a hash table of size ten million (m = 10,000,000)
+        char** readset = nullptr;               // Array for readset
+        int* genomeIndex = new int;            // Pointer for indexing genome
+        char** genomeKmer;                    // Array for genome splits into kmer
+        int* genomeRowCount = new int;       // Number of rows in the genome kmer
+        char* subGenome = nullptr;          // To expand portion of genome for seed search
+        int* subGenomeLength = new int;    // Length of the sub-genome
+        bool* seedFound = new bool;       // Boolean indicating whether the seed was found or not
+        bool printFlag = false;          // Boolean indicating whether to print text alignment or not
+        Node** T;                       // Pointer to hash table
+        int percentError;              // Percent of error (to be set 5% to work on the second part of 1A)
 
         // Saving the genome from its file:
         genomeLength = testObject.getLengthOfGenome(genomeFilePath);

@@ -345,21 +345,21 @@ void BLAST::createRandomReads(char** readset, int readCount, int readLength)
 }
 
 // Function to split fragment into kmers, and to return that saved array:
-char** BLAST::splitFragmentIntoKmer(char* input, int inputLength, int kmer, int* numRow) 
+char** BLAST::splitFragmentIntoKmer(char* input, int inputLength, int kmer, int* rowCount) 
 {
     char** output;
     int j = 0;
-    *numRow = inputLength - kmer + 1;
+    *rowCount = inputLength - kmer + 1;
 
     // Initializing the kmer array, now that I know the size of it:
-    output = new char* [*numRow];
-    for(int i = 0; i < *numRow; i++) 
+    output = new char* [*rowCount];
+    for(int i = 0; i < *rowCount; i++) 
     {
         output[i] = new char[kmer];
     }
 
     // Splitting into kmer fragments and save as a 2D array: 
-    for(int r = 0; r < *numRow; r++) 
+    for(int r = 0; r < *rowCount; r++) 
     {
         for(int i = 0; i < kmer; i++) 
         {
@@ -395,10 +395,10 @@ Node** BLAST::createHashTable(int hashTableSize)
 // Function to insert a character array into my hash table:
 void BLAST::insertFragmentInTable(char* fragment, int kmer, int hashTableSize, Node** T, int* genomeIndex) 
 {
-    int radixNum, address;
-    radixNum = convertFragmentToRadixNumber(fragment,kmer);
-    address = divisionMethodHash(radixNum, hashTableSize);
-    insertInTable(address, radixNum, T, hashTableSize, genomeIndex);
+    int radixNumber, address;
+    radixNumber = convertFragmentToRadixNumber(fragment, kmer);
+    address = divisionMethodHash(radixNumber, hashTableSize);
+    insertInTable(address, radixNumber, T, hashTableSize, genomeIndex);
     return;
 }
 
@@ -407,18 +407,18 @@ int BLAST::convertFragmentToRadixNumber(char* inputRead, int kmer)
 {
     int* readInteger = new int[kmer];
     char* readCharacter = new char[kmer];    
-    int radixNum; // Radix number for a single fragment
+    int radixNumber; // Radix number for a single fragment
 
     for(int j = 0; j < kmer; j++) 
     {
         readCharacter[j] = inputRead[j];
     }
     readInteger = characterToIntegerConversion(readCharacter, readInteger, kmer);
-    radixNum = radixBaseConversion(readInteger, kmer);
+    radixNumber = radixBaseConversion(readInteger, kmer);
 
     delete[] readInteger;
     delete[] readCharacter;
-    return radixNum;
+    return radixNumber;
 }
 
 // Function to convert 16-char array with char (A, C, G, T) to 16-int array (0, 1, 2, 3):
@@ -532,36 +532,36 @@ bool BLAST::searchTableForRadix(Node* tableAddress, int radixNumber, int* genome
 // Function to search the hash table for a given query within the BLAST class:
 bool BLAST::searchTableForFragment(char* fragment, int kmer, int hashTableSize, Node** T, int* genomeIndex) 
 {
-    int radixNum = convertFragmentToRadixNumber(fragment, kmer);
-    int address = divisionMethodHash(radixNum, hashTableSize);
-    bool isThere = searchTableForRadix(T[address], radixNum, genomeIndex);
+    int radixNumber = convertFragmentToRadixNumber(fragment, kmer);
+    int address = divisionMethodHash(radixNumber, hashTableSize);
+    bool isThere = searchTableForRadix(T[address], radixNumber, genomeIndex);
     return isThere;
 }
 
 // Function to return the length of the sub genome: (sets lower and upper bounds prior to that)
 // (Any expansion below the minimum genome index (0) above the maximum (genome length) is capped off at zero and max respectively)
-int BLAST::getSubGenomeLength(int* lowBound, int* upBound, int* genomeIndex, int currentReadKmer, int kmer, int currentReverseIndex, int genomeLength) 
+int BLAST::getSubGenomeLength(int* lowerBound, int* upperBound, int* genomeIndex, int currentReadKmer, int kmer, int currentReverseIndex, int genomeLength) 
 {
     int subGenomeLength;
-    *lowBound = *genomeIndex - currentReadKmer;
-    if(*lowBound < 0) 
+    *lowerBound = *genomeIndex - currentReadKmer;
+    if(*lowerBound < 0) 
     {
-        *lowBound = 0;
+        *lowerBound = 0;
     }
-    *upBound = *genomeIndex + kmer + currentReverseIndex;
-    if(*upBound > genomeLength) 
+    *upperBound = *genomeIndex + kmer + currentReverseIndex;
+    if(*upperBound > genomeLength) 
     {
-        *upBound = genomeLength;
+        *upperBound = genomeLength;
     }
-    subGenomeLength = *upBound - *lowBound;
+    subGenomeLength = *upperBound - *lowerBound;
     return subGenomeLength;
 }
 
 // Function to expand the seed and save the sub-genome:
-void BLAST::expandSeed(int* lowBound, int* upBound, char* genome, char* subGenome) 
+void BLAST::expandSeed(int* lowerBound, int* upperBound, char* genome, char* subGenome) 
 {
     int index = 0;
-    for(int i = *lowBound; i < *upBound; i++) 
+    for(int i = *lowerBound; i < *upperBound; i++) 
     {
         subGenome[index] = genome[i];
         index++;
@@ -572,14 +572,14 @@ void BLAST::expandSeed(int* lowBound, int* upBound, char* genome, char* subGenom
 // Function to search and expand a seed:
 char* BLAST::searchAndExpandSeed(int readNumber, char** readset, int readLength, int kmer, int hashTableSize, int* genomeIndex, Node** T, int genomeLength, char* genome, int* subGenomeLength, bool* seedFound, char* subGenome, bool printFlag) 
 {
-    int* numRowReadKmer = new int;
-    int* lowBound = new int;
-    int* upBound = new int;
+    int* kmerReadRowCount = new int;
+    int* lowerBound = new int;
+    int* upperBound = new int;
     bool isThere;
-    char** readKmer = splitFragmentIntoKmer(readset[readNumber], readLength, kmer, numRowReadKmer);
-    int notFoundCount = 0, currentReadKmer = 0, currentReverseIndex = *numRowReadKmer - 1;
+    char** readKmer = splitFragmentIntoKmer(readset[readNumber], readLength, kmer, kmerReadRowCount);
+    int notFoundCount = 0, currentReadKmer = 0, currentReverseIndex = *kmerReadRowCount - 1;
     *subGenomeLength = 1;
-    while(currentReadKmer < *numRowReadKmer) 
+    while(currentReadKmer < *kmerReadRowCount) 
     {
         isThere = searchTableForFragment(readKmer[currentReadKmer], kmer, hashTableSize, T, genomeIndex);
         if(isThere) 
@@ -588,9 +588,9 @@ char* BLAST::searchAndExpandSeed(int readNumber, char** readset, int readLength,
             {
                 print("First read found:\n");
             }
-            *subGenomeLength = getSubGenomeLength(lowBound, upBound, genomeIndex, currentReadKmer, kmer, currentReverseIndex, genomeLength);
+            *subGenomeLength = getSubGenomeLength(lowerBound, upperBound, genomeIndex, currentReadKmer, kmer, currentReverseIndex, genomeLength);
             subGenome = new char[*subGenomeLength];
-            expandSeed(lowBound, upBound, genome, subGenome);
+            expandSeed(lowerBound, upperBound, genome, subGenome);
             *seedFound = true;
             break; // Stopping at the first seed that has been found.
         }
@@ -600,7 +600,7 @@ char* BLAST::searchAndExpandSeed(int readNumber, char** readset, int readLength,
             currentReadKmer++;
             currentReverseIndex--;
         }
-        if(notFoundCount == *numRowReadKmer) 
+        if(notFoundCount == *kmerReadRowCount) 
         {
             if(printFlag) 
             {
@@ -611,14 +611,14 @@ char* BLAST::searchAndExpandSeed(int readNumber, char** readset, int readLength,
             *seedFound = false;
         }
     }
-    for(int i = 0; i < *numRowReadKmer; i++) 
+    for(int i = 0; i < *kmerReadRowCount; i++) 
     {
         delete[] readKmer[i];
     }
     delete[] readKmer;
-    delete lowBound;
-    delete upBound;
-    delete numRowReadKmer;
+    delete lowerBound;
+    delete upperBound;
+    delete kmerReadRowCount;
     return subGenome;
 }
 
@@ -690,7 +690,7 @@ char** BLAST::selectNRandomFragmentsFromGenome(int readCount, int readLength, ch
 // Function to update the readset by introducing 5% error rate of base change:
 void BLAST::introducePercentError(int readCount, int readLength, char** readset, int percentError) 
 {
-    int randNumberOne, randNumberTwo;
+    int randomNumberOne, randomNumberTwo;
     char original;
     srand(time(0));
     for(int i = 0; i < readCount; i++) 
@@ -698,17 +698,17 @@ void BLAST::introducePercentError(int readCount, int readLength, char** readset,
         for(int j = 0; j < readLength; j++) 
         {    // x% error rate introduction can be done in multiple ways as I can think of. The one I was used for the previous problem (check hash table constructs) was with the range, i.e. it would be (95 + 1 - 0) + 0 here
             // For this one, I will check if the number obtained from 0 to 99 lies within the safe zone for (100 - 95) = 5% error, i.e. within 0 to 94. If it doesn't, then it hits the 5% error rate.
-            randNumberOne = rand() % 100;
-            if(randNumberOne > 100 - percentError) 
+            randomNumberOne = rand() % 100;
+            if(randomNumberOne > 100 - percentError) 
             {
                 original = readset[i][j]; // Saving original character
                 while(readset[i][j] == original) 
                 {
-                    randNumberTwo = (rand() % 4);
-                    if(randNumberTwo == 0)      readset[i][j] = 'A';
-                    else if(randNumberTwo == 1) readset[i][j] = 'C';
-                    else if(randNumberTwo == 2) readset[i][j] = 'G';
-                    else if(randNumberTwo == 3) readset[i][j] = 'T';
+                    randomNumberTwo = (rand() % 4);
+                    if(randomNumberTwo == 0)      readset[i][j] = 'A';
+                    else if(randomNumberTwo == 1) readset[i][j] = 'C';
+                    else if(randomNumberTwo == 2) readset[i][j] = 'G';
+                    else if(randomNumberTwo == 3) readset[i][j] = 'T';
                     else 
                     {
                         print("Invalid input.\nExiting!\n");

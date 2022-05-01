@@ -347,17 +347,7 @@ bool suffixTree::searchSuffixTree(char* inputQuery, int inputQueryLength)
 // Function to search a sequence in the genome from my suffix tree:
 void suffixTree::searchSuffixTreeForRead(char* sequence, int length) 
 {
-    /**
-    // Obtaining the length of the sequence:
-    int currentReadLength = 0;    
-    while(sequence[currentReadLength] != '\0') 
-    {
-            currentReadLength++;
-    }
-    **/
-    // Setting the length of the sequence to input parameter: (given that I'm taking the sequence length as input now)
     int currentReadLength = length;
-
     // Searching my suffix tree for the current read:
     print("Searching for ");
     for(int i = 0; i < currentReadLength; i++) 
@@ -404,7 +394,7 @@ char** suffixTree::select_N_RandomFragmentsFromGenome(int readCount, int readLen
 int suffixTree::searchSuffixTrieFor_N_RandomReadsFromGenome(int readCount, int readLength) 
 {
     bool isThere;
-    int numMatches = 0;
+    int matchCount = 0;
     // Creating readCount number of random reads from the genome:
     char** readset = select_N_RandomFragmentsFromGenome(readCount, readLength);
 
@@ -414,7 +404,7 @@ int suffixTree::searchSuffixTrieFor_N_RandomReadsFromGenome(int readCount, int r
     { 
         isThere = searchSuffixTree(readset[currentReadIndex], readLength);
         // Incrementing counter by one if the read is found:
-        numMatches += (isThere) ? 1 : 0;
+        matchCount += (isThere) ? 1 : 0;
     }
     auto stop = high_resolution_clock::now();
     // Casting to milliseconds since I observed timings less than a second for low read count:
@@ -427,5 +417,5 @@ int suffixTree::searchSuffixTrieFor_N_RandomReadsFromGenome(int readCount, int r
         delete[] readset[i];
     }
 
-    return numMatches;
+    return matchCount;
 }

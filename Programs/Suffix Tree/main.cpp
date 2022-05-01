@@ -24,20 +24,31 @@ int main(int argc, char* argv[])
 
     if(!problem.compare("Problem1A"))
     {
-        // Considering ten million random 36-mers:        
-        int matchCount, readCount = 10000000, readLength = 36;
+        // Considering five million random 36-mers:        
+        int matchCount, readCount = 5000000, readLength = 36;
         suffixTree testObject(genomeFilePath);
         testObject.createGenomeSuffixTree();
         print("\nSearching the suffix tree for ", readCount, " reads: \n");
         matchCount = testObject.searchSuffixTrieFor_N_RandomReadsFromGenome(readCount, readLength);
         print("Total number of matchCount (reads found): ", matchCount, "\n");
+        // Considering ten million random 36-mers:        
+        matchCount = 0; readCount = 10000000;
+        print("\nSearching the suffix tree for ", readCount, " reads: \n");
+        matchCount = testObject.searchSuffixTrieFor_N_RandomReadsFromGenome(readCount, readLength);
+        print("Total number of matchCount (reads found): ", matchCount, "\n");
     }
     else if(!problem.compare("Problem1B"))
-    {
+    {        
+        // Search for a perfect match: (modify the sequence as you desire!)        
         char* sequence = "ACGTACGTACGTACGTACGTACGTACGTACGTACGT";
+        int readLength = 0;
+        while(sequence[readLength] != '\0') 
+        {
+            readLength++;
+        }        
         suffixTree test(genomeFilePath);
         test.createGenomeSuffixTree();
-        test.searchSuffixTreeForRead(sequence, 36);       
+        test.searchSuffixTreeForRead(sequence, readLength);       
     }    
     else 
     {

@@ -122,60 +122,23 @@ void suffixTree::createGenomeSuffixTree()
                     currentNode->T = NULL; \
                     currentNode->$ = NULL
 
-                case 'A':
-                if(currentNode->A == NULL) 
-                {
-                    treeNodeCount++;
-                    currentNode->A = new Node;
-                    currentNode = currentNode->A;
-                    nullAllNodes();
-                }
-                else currentNode = currentNode->A;
-                break;
+                #define buildNodeCase(character, whichNode) \
+                case character:                             \
+                if(currentNode->whichNode == NULL)          \
+                {                                           \
+                    treeNodeCount++;                        \
+                    currentNode->whichNode = new Node;      \
+                    currentNode = currentNode->whichNode;   \
+                    nullAllNodes();                         \
+                }                                           \
+                else currentNode = currentNode->whichNode;  \
+                break
 
-                case 'C':                    
-                if(currentNode->C == NULL) 
-                {  
-                    treeNodeCount++;
-                    currentNode->C = new Node;
-                    currentNode = currentNode->C;
-                    nullAllNodes();
-                }
-                else currentNode = currentNode->C;
-                break;
-
-                case 'G':                  
-                if(currentNode->G == NULL) 
-                {
-                    treeNodeCount++;
-                    currentNode->G = new Node;
-                    currentNode = currentNode->G;
-                    nullAllNodes();
-                }
-                else currentNode = currentNode->G;
-                break;
-
-                case 'T':
-                if(currentNode->T == NULL) 
-                { 
-                    treeNodeCount++;
-                    currentNode->T = new Node;
-                    currentNode = currentNode->T;
-                    nullAllNodes();
-                }
-                else currentNode = currentNode->T;
-                break;
-
-                case '$':              
-                if(currentNode->$ == NULL) 
-                {
-                    treeNodeCount++;
-                    currentNode->$ = new Node;
-                    currentNode = currentNode->$;
-                    nullAllNodes();
-                }
-                else currentNode = currentNode->$;
-                break;
+                buildNodeCase('A', A);
+                buildNodeCase('C', C);
+                buildNodeCase('G', G);
+                buildNodeCase('T', T);
+                buildNodeCase('$', $);
 
                 default:
                 print("Error! Valid characters include A, C, G, T (also $) only.\n");

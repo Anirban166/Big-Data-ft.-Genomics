@@ -172,17 +172,20 @@ void prefixTree::createTrieReadset()
             currentCharacter = readset[n][i]; // Setting current character to insert
             switch(currentCharacter) 
             {
+                #define nullAllNodes() \
+                    currentNode->A = NULL; \
+                    currentNode->C = NULL; \
+                    currentNode->G = NULL; \
+                    currentNode->T = NULL; \
+                    currentNode->$ = NULL
+
                 case 'A':
                 if(currentNode->A == NULL) 
                 {
                     trieNodeCount++;
                     currentNode->A = new Node;
                     currentNode = currentNode->A;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->A;
                 break;
@@ -193,11 +196,7 @@ void prefixTree::createTrieReadset()
                     trieNodeCount++;
                     currentNode->C = new Node;
                     currentNode = currentNode->C;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->C;
                 break;
@@ -208,11 +207,7 @@ void prefixTree::createTrieReadset()
                     trieNodeCount++;
                     currentNode->G = new Node;
                     currentNode = currentNode->G;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->G;
                 break;
@@ -223,11 +218,7 @@ void prefixTree::createTrieReadset()
                     trieNodeCount++;
                     currentNode->T = new Node;
                     currentNode = currentNode->T;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->T;
                 break;
@@ -238,15 +229,11 @@ void prefixTree::createTrieReadset()
                     trieNodeCount++;
                     currentNode->$ = new Node;
                     currentNode = currentNode->$;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->$;
                 break;
-
+                
                 default:
                 print("Error! Valid characters include A, C, G, T (also $) only.\n");
                 exit(-1);
@@ -607,7 +594,7 @@ void prefixTree::saveNRandomFragmentsFromGenomeAsReadset()
 // Function to update the readset by introducing x% per-base error rate:
 void prefixTree::introducePercentError(int percentError) 
 {
-    int randNumberOne, randNumberTwo;
+    int randomNumberOne, randomNumberTwo;
     char original;
     srand(time(0));
     for(int i = 0; i < rowCountForReads; i++) 
@@ -615,17 +602,17 @@ void prefixTree::introducePercentError(int percentError)
         for(int j = 0; j < readLength - 1; j++) 
         {
             // Checking if the number obtained from 0 to 99 lies within the safe zone for x% error, i.e. within 0 to (99 - x): (if it doesn't, then it hits the x% error rate)
-            randNumberOne = rand() % 100 + 1;
-            if(randNumberOne > 100 - percentError) 
+            randomNumberOne = rand() % 100 + 1;
+            if(randomNumberOne > 100 - percentError) 
             {
                 original = readset[i][j]; // Saving the original character
                 while(readset[i][j] == original) 
                 {   
-                    randNumberTwo = (rand() % 4);
-                    if(randNumberTwo == 0)      readset[i][j] = 'A';
-                    else if(randNumberTwo == 1) readset[i][j] = 'C';
-                    else if(randNumberTwo == 2) readset[i][j] = 'G';
-                    else if(randNumberTwo == 3) readset[i][j] = 'T';
+                    randomNumberTwo = (rand() % 4);
+                    if(randomNumberTwo == 0)      readset[i][j] = 'A';
+                    else if(randomNumberTwo == 1) readset[i][j] = 'C';
+                    else if(randomNumberTwo == 2) readset[i][j] = 'G';
+                    else if(randomNumberTwo == 3) readset[i][j] = 'T';
                     else 
                     {
                         print("Invalid input.\nExiting!\n");

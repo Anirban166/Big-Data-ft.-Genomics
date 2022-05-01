@@ -115,82 +115,69 @@ void suffixTree::createGenomeSuffixTree()
             currentCharacter = genome[i + j]; // Current character to insert is genome[i + j] == first character in the current suffix
             switch(currentCharacter) 
             {
+                #define nullAllNodes() \
+                    currentNode->A = NULL; \
+                    currentNode->C = NULL; \
+                    currentNode->G = NULL; \
+                    currentNode->T = NULL; \
+                    currentNode->$ = NULL
+
                 case 'A':
                 if(currentNode->A == NULL) 
                 {
                     treeNodeCount++;
                     currentNode->A = new Node;
                     currentNode = currentNode->A;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->A;
                 break;
 
-                case 'C':
+                case 'C':                    
                 if(currentNode->C == NULL) 
-                {
+                {  
                     treeNodeCount++;
                     currentNode->C = new Node;
                     currentNode = currentNode->C;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->C;
                 break;
 
-                case 'G':
+                case 'G':                  
                 if(currentNode->G == NULL) 
                 {
                     treeNodeCount++;
                     currentNode->G = new Node;
                     currentNode = currentNode->G;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->G;
                 break;
 
-                case 'T':                        
+                case 'T':
                 if(currentNode->T == NULL) 
-                {
+                { 
                     treeNodeCount++;
                     currentNode->T = new Node;
                     currentNode = currentNode->T;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->T;
                 break;
 
-                case '$':
+                case '$':              
                 if(currentNode->$ == NULL) 
                 {
                     treeNodeCount++;
                     currentNode->$ = new Node;
                     currentNode = currentNode->$;
-                    currentNode->A = NULL;
-                    currentNode->C = NULL;
-                    currentNode->G = NULL;
-                    currentNode->T = NULL;
-                    currentNode->$ = NULL;
+                    nullAllNodes();
                 }
                 else currentNode = currentNode->$;
                 break;
 
-            default:
+                default:
                 print("Error! Valid characters include A, C, G, T (also $) only.\n");
                 exit(-1);
             }

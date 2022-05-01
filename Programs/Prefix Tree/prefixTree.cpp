@@ -92,7 +92,7 @@ prefixTree::~prefixTree()
     Node* currentNode;
     std::stack <Node*> deconStack;
 
-    // Pushing all the non-NULL children of the root to stack:
+    // Pushing all the non-NULL children of the root to my stack:
     currentNode = root;
     if(currentNode->A != NULL) deconStack.push(currentNode->A);
     if(currentNode->C != NULL) deconStack.push(currentNode->C);
@@ -297,7 +297,7 @@ int prefixTree::fuzzySearchTrie(char* inputGenomeQuery)
         currentRemainingLength++;
     }
 
-    // Pushing the non-NULL children of the root with traversal information onto stack:
+    // Pushing the non-NULL children of the root with traversal information onto my stack:
     switch(currentQueryCharacter) 
     {
         case 'A': // If character matches with the base A, I save and push the traversal information if it ain't NULL
